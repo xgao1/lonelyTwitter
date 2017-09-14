@@ -40,6 +40,19 @@ public class LonelyTwitterActivity extends Activity {
 				setResult(RESULT_OK);
 				String text = bodyText.getText().toString();
 				saveInFile(text, new Date(System.currentTimeMillis()));
+
+
+				Tweet tweet = new ImportantTweet("");
+				Tweet tweet1 = new NormalTweet("Hi");
+				try {
+					tweet.setMessage("Hello");
+				} catch (TweetTooLongException e)
+				{}
+
+				Tweetable tweet3 = new ImportantTweet("");
+				ArrayList<Tweet> tweetList= new ArrayList<Tweet>();
+				tweetList.add(tweet);
+				tweetList.add(tweet1);
 				finish();
 
 			}
