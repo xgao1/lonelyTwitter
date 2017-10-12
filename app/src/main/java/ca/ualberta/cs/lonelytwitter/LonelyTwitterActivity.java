@@ -94,7 +94,7 @@ public class LonelyTwitterActivity extends Activity {
 
 			}
 		});
-	}	
+	}
 
 	@Override
 	protected void onStart() {
