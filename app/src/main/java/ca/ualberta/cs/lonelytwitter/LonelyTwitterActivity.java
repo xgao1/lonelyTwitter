@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,18 +26,19 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.robotium.solo.Solo;
 
 import io.searchbox.core.Search;
 
-public class LonelyTwitterActivity extends Activity {
 
+
+public class LonelyTwitterActivity extends Activity{
+	private LonelyTwitterActivity activity = this;
 	private static final String FILENAME = "file.sav";
 	private EditText bodyText;
 	private ListView oldTweetsList;
 	private ArrayList<NormalTweet> tweetList = new ArrayList<NormalTweet>();
 	private ArrayAdapter<NormalTweet> adapter;
-
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,8 @@ public class LonelyTwitterActivity extends Activity {
 
 		bodyText = (EditText) findViewById(R.id.body);
 		Button saveButton = (Button) findViewById(R.id.save);
-		Button searchButton = (Button) findViewById(R.id.clear);
+		Button clearButton = (Button) findViewById(R.id.clear);
+//		Button searchButton = (Button) findViewById(R.id.clear);
 		oldTweetsList = (ListView) findViewById(R.id.oldTweetsList);
 
 		saveButton.setOnClickListener(new View.OnClickListener() {
@@ -56,41 +59,50 @@ public class LonelyTwitterActivity extends Activity {
 				NormalTweet newTweet = new NormalTweet(text);
 				tweetList.add(newTweet);
 				adapter.notifyDataSetChanged();
-				//saveInFile(); // TODO replace this with elastic search
+				saveInFile(); // TODO replace this with elastic search
 				ElasticsearchTweetController.AddTweetsTask addTweetsTask = new ElasticsearchTweetController.AddTweetsTask();
 				addTweetsTask.execute(newTweet);
 			}
 		});
 
-//		clearButton.setOnClickListener(new View.OnClickListener() {
-//
+		clearButton.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				setResult(RESULT_OK);
+				tweetList.clear();
+				deleteFile(FILENAME);  // TODO deprecate this button
+				adapter.notifyDataSetChanged();
+			}
+		});
+
+//		searchButton.setOnClickListener(new View.OnClickListener() {
 //			public void onClick(View v) {
-//				setResult(RESULT_OK);
 //				tweetList.clear();
-//				deleteFile(FILENAME);  // TODO deprecate this button
+//				String parameters = bodyText.getText().toString().trim();
+//				String query = "{\n" +
+//						"  \"query\": {\n" +
+//						"    \"term\" : { \"user\" : \"" + parameters + "\" } \n" +
+//						"  }\n" +
+//						"}";
+//				ElasticsearchTweetController.GetTweetsTask searchTweetsTask
+//						= new ElasticsearchTweetController.GetTweetsTask();
+//				searchTweetsTask.execute(query);
+//				try {
+//					tweetList = searchTweetsTask.get();
+//
+//				} catch (Exception e) {
+//					Log.i("Error", "Failed to get the tweets from the async object");
+//				}
 //				adapter.notifyDataSetChanged();
+//
 //			}
 //		});
-
-		searchButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				tweetList.clear();
-				String parameters = bodyText.getText().toString().trim();
-				String query = "{\n" +
-						"  \"query\": {\n" +
-						"    \"term\" : { \"user\" : \"" + parameters + "\" } \n" +
-						"  }\n" +
-						"}";
-				ElasticsearchTweetController.GetTweetsTask searchTweetsTask
-						= new ElasticsearchTweetController.GetTweetsTask();
-				searchTweetsTask.execute(query);
-				try {
-					tweetList = searchTweetsTask.get();
-
-				} catch (Exception e) {
-					Log.i("Error", "Failed to get the tweets from the async object");
-				}
-				adapter.notifyDataSetChanged();
+		oldTweetsList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+				Intent intent = new Intent(activity, EditTweetActivity.class);
+				String message = tweetList.get(position).getMessage();
+				intent.putExtra("input", message);
+				startActivity(intent);
 
 			}
 		});
