@@ -28,7 +28,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.robotium.solo.Solo;
 
-import io.searchbox.core.Search;
+// delete the import because it do not be used in the function
+//import io.searchbox.core.Search;
 
 
 

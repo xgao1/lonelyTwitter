@@ -3,11 +3,12 @@ package ca.ualberta.cs.lonelytwitter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.EditText;
-
-import com.robotium.solo.Solo;
+//the import should be delete, because it is not be used
+//import com.robotium.solo.Solo;
 
 public class EditTweetActivity extends Activity {
-    EditText fromist;
+    // change EditText into private, because it is an attribute for for the function
+    private EditText fromist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

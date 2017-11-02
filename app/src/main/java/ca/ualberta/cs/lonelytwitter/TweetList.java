@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class TweetList {
 
     private ArrayList<Tweet> tweets =new ArrayList<Tweet>();
-    public TweetList(){};
+    public TweetList(){}
     public void add(Tweet tweet){
         tweets.add(tweet);
     }

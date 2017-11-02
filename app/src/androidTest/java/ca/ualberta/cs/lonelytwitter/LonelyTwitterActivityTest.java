@@ -24,10 +24,10 @@ public class LonelyTwitterActivityTest extends ActivityInstrumentationTestCase2<
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
     }
-
-    public void testStart() throws Exception{
-        Activity activity = getActivity();
-    }
+//       public void testStart() throws Exception{
+// delete testStart() because  activity is never be used
+//        Activity activity = getActivity();
+//    }
 
     public void testTweet(){
         solo.assertCurrentActivity("Wrong activity", LonelyTwitterActivity.class);
